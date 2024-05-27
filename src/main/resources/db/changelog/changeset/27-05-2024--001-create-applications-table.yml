@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: 27-05-2024--001-create-applications-table
+      author: Nataly
+      changes:
+        - createTable:
+            tableName: applications
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: inn
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: region
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: capital
+                  type: double

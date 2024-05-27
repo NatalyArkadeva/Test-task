@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 27-05-2024--002-create-application-decisions-table
+      author: Nataly
+      changes:
+        - createTable:
+            tableName: application_decisions
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: result
+                  type: boolean
+              - column:
+                  name: inn_description
+                  type: varchar
+              - column:
+                  name: region_description
+                  type: varchar
+              - column:
+                  name: capital_description
+                  type: varchar
+              - column:
+                  name: application_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_application_decisions_applications
+                    referencedTableName: applications
+                    referencedColumnNames: id
+                    nullable: false

@@ -1,0 +1,28 @@
+server.port: 8080
+
+spring:
+  liquibase:
+    enabled: true
+  jpa:
+    database: POSTGRESQL
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+  datasource:
+    url: jdbc:postgresql://localhost:5550/test_task
+    username: admin
+    password: admin
+    driverClassName: org.postgresql.Driver
+
+logging:
+  file.path: ./logs
+
+camunda:
+  bpm:
+    admin-user:
+      id: demo
+      password: demo
+    generic-properties:
+      properties:
+        historyTimeToLive: P1D

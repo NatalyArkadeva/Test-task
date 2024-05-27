@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20191111/MODEL/" xmlns:dmndi="https://www.omg.org/spec/DMN/20191111/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:modeler="http://camunda.org/schema/modeler/1.0" xmlns:biodi="http://bpmn.io/schema/dmn/biodi/2.0" xmlns:camunda="http://camunda.org/schema/1.0/dmn" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" id="Definitions_18kmlux" name="DRD" namespace="http://camunda.org/schema/1.0/dmn" exporter="Camunda Modeler" exporterVersion="5.23.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.21.0">
+  <decision id="Decision_0rd57ug" name="innDecision">
+    <informationRequirement id="InformationRequirement_0u571ne">
+      <requiredInput href="#inn" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1aeuqm7" hitPolicy="COLLECT">
+      <input id="Input_1" label="inn" biodi:width="192" camunda:inputVariable="inn">
+        <inputExpression id="InputExpression_1" typeRef="boolean" expressionLanguage="feel">
+          <text></text>
+        </inputExpression>
+      </input>
+      <output id="Output_1" label="result" name="innResult" typeRef="string" biodi:width="192" />
+      <rule id="DecisionRule_0q4qwfx">
+        <description>ИНН ИП содержит 12 цифр</description>
+        <inputEntry id="UnaryTests_0uf4mu2">
+          <text>string length(inn) = 12</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_03y1c4w">
+          <text>"Компания является ИП"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_0re6efr">
+        <description>У компаний нерезидентов РФ ИНН начинается с 9909</description>
+        <inputEntry id="UnaryTests_1h4t1ii">
+          <text>starts with(inn, "9909")</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0o0314n">
+          <text>"Компания не является резидентом РФ"</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_130eem4">
+        <inputEntry id="UnaryTests_08d2vhq">
+          <text></text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1wybed2">
+          <text></text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <decision id="Decision_0vy6p6k" name="regionDecision">
+    <informationRequirement id="InformationRequirement_1q5zje3">
+      <requiredInput href="#region" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1ogn4da" hitPolicy="FIRST">
+      <input id="InputClause_1x2fr0l" label="region" camunda:inputVariable="region">
+        <inputExpression id="LiteralExpression_13fitm7" typeRef="integer" />
+      </input>
+      <output id="OutputClause_118tsvj" label="regionResult" name="regionResult" typeRef="string" />
+      <rule id="DecisionRule_0p5sq5q">
+        <description>Регион Красноярского Края = 24</description>
+        <inputEntry id="UnaryTests_19xmj98">
+          <text>24</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1p8cga3">
+          <text>"Компания находится в запрещенном регионе (Красноярский край)"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="inn" name="inn" />
+  <inputData id="region" name="region" />
+  <decision id="Decision_0yun3fz" name="capitalDecision">
+    <informationRequirement id="InformationRequirement_0ynkdpb">
+      <requiredInput href="#capital" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_09wqebu" hitPolicy="FIRST">
+      <input id="InputClause_07ypug3" label="capital" camunda:inputVariable="capital">
+        <inputExpression id="LiteralExpression_1nbheas" typeRef="double" />
+      </input>
+      <output id="OutputClause_0bhamif" label="capitalResult" name="capitalResult" typeRef="string" />
+      <rule id="DecisionRule_0mig72j">
+        <description>Капитал компании меньше 5 000 000</description>
+        <inputEntry id="UnaryTests_0ktvp91">
+          <text>&lt; 5000000.0</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_14qj9dn">
+          <text>"Капитал компании меньше 5 000 000"</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <inputData id="capital" name="capital" />
+  <decision id="Decision_0ffh5xj" name="resultDecision">
+    <informationRequirement id="InformationRequirement_0j6mv5v">
+      <requiredDecision href="#Decision_0vy6p6k" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_07gepea">
+      <requiredDecision href="#Decision_0yun3fz" />
+    </informationRequirement>
+    <informationRequirement id="InformationRequirement_1ps483o">
+      <requiredDecision href="#Decision_0rd57ug" />
+    </informationRequirement>
+    <decisionTable id="DecisionTable_1jmreff" hitPolicy="FIRST">
+      <input id="InputClause_11sqdx5" label="innDecision">
+        <inputExpression id="LiteralExpression_1a6ns4q" typeRef="string">
+          <text>innResult</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_0zomicj" label="regionDecision">
+        <inputExpression id="LiteralExpression_1cs9s1c" typeRef="string">
+          <text>regionResult</text>
+        </inputExpression>
+      </input>
+      <input id="InputClause_1fv0m21" label="capitalDecision">
+        <inputExpression id="LiteralExpression_167kv4h" typeRef="string">
+          <text>capitalResult</text>
+        </inputExpression>
+      </input>
+      <output id="OutputClause_178aka0" label="innDecision" name="innLengthDecision" typeRef="string" biodi:width="192" />
+      <output id="OutputClause_1a984s0" label="regionDecision" name="regionDecision" typeRef="string" />
+      <output id="OutputClause_0ddrslm" label="capitalDecision" name="capitalDecision" typeRef="string" />
+      <output id="OutputClause_0tiiooe" label="result" name="result" typeRef="boolean" />
+      <rule id="DecisionRule_16hv6vz">
+        <inputEntry id="UnaryTests_1nrl5gp">
+          <text>null</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_0lmmdrc">
+          <text>null</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_15eprlb">
+          <text>null</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_0s6vs0x">
+          <text></text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_03f163j">
+          <text></text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_187rs58">
+          <text></text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_159g0xm">
+          <text>false</text>
+        </outputEntry>
+      </rule>
+      <rule id="DecisionRule_16h6a1j">
+        <inputEntry id="UnaryTests_0kazqpo">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1coyswb">
+          <text>-</text>
+        </inputEntry>
+        <inputEntry id="UnaryTests_1qnfmzs">
+          <text>-</text>
+        </inputEntry>
+        <outputEntry id="LiteralExpression_1dh3bd1">
+          <text>innResult</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_1bme013">
+          <text>regionResult</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_031ft1f">
+          <text>capitalResult</text>
+        </outputEntry>
+        <outputEntry id="LiteralExpression_0209k41">
+          <text>true</text>
+        </outputEntry>
+      </rule>
+    </decisionTable>
+  </decision>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram>
+      <dmndi:DMNShape dmnElementRef="Decision_0rd57ug">
+        <dc:Bounds height="80" width="180" x="160" y="270" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_09rho4l" dmnElementRef="Decision_0vy6p6k">
+        <dc:Bounds height="80" width="180" x="411" y="270" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_0ji9eoc" dmnElementRef="inn">
+        <dc:Bounds height="45" width="125" x="188" y="408" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1ilo475" dmnElementRef="InformationRequirement_0u571ne">
+        <di:waypoint x="251" y="408" />
+        <di:waypoint x="250" y="370" />
+        <di:waypoint x="250" y="350" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0u1evan" dmnElementRef="region">
+        <dc:Bounds height="45" width="125" x="438" y="409" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1srduek" dmnElementRef="InformationRequirement_1q5zje3">
+        <di:waypoint x="501" y="409" />
+        <di:waypoint x="501" y="370" />
+        <di:waypoint x="501" y="350" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_14l8a0y" dmnElementRef="Decision_0yun3fz">
+        <dc:Bounds height="80" width="180" x="671" y="270" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="DMNShape_108fp7c" dmnElementRef="capital">
+        <dc:Bounds height="45" width="125" x="698" y="409" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1kqlm58" dmnElementRef="InformationRequirement_0ynkdpb">
+        <di:waypoint x="761" y="409" />
+        <di:waypoint x="761" y="370" />
+        <di:waypoint x="761" y="350" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNShape id="DMNShape_0waqq7v" dmnElementRef="Decision_0ffh5xj">
+        <dc:Bounds height="80" width="180" x="411" y="100" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="DMNEdge_1ecaf7s" dmnElementRef="InformationRequirement_0j6mv5v">
+        <di:waypoint x="501" y="270" />
+        <di:waypoint x="501" y="200" />
+        <di:waypoint x="501" y="180" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0rmdme7" dmnElementRef="InformationRequirement_07gepea">
+        <di:waypoint x="761" y="270" />
+        <di:waypoint x="546" y="200" />
+        <di:waypoint x="546" y="180" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="DMNEdge_0pt61sm" dmnElementRef="InformationRequirement_1ps483o">
+        <di:waypoint x="250" y="270" />
+        <di:waypoint x="456" y="200" />
+        <di:waypoint x="456" y="180" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
